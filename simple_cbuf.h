@@ -18,7 +18,7 @@ class simple_cbuf {
 	private:
 		/* whatever you want */
 		int		*data;
-		size_t	length;
+		size_t	buf_length;
 		uint32_t	front;
 		uint32_t	back;
 };

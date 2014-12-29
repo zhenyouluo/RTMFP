@@ -1,9 +1,9 @@
 
 #include "simple_cbuf.h"
 
-simple_cbuf::simple_cbuf(size_t size) : length(size)
+simple_cbuf::simple_cbuf(size_t size) : buf_length(size + 1)
 {
-	data = new int[length];
+	data = new int[buf_length];
 	front = back = 0;
 }
 
@@ -15,7 +15,7 @@ simple_cbuf::~simple_cbuf()
 size_t
 simple_cbuf::size() const
 {
-	return length;
+	return (back + buf_length - front) % buf_length;
 }
 
 bool
@@ -27,8 +27,11 @@ simple_cbuf::empty() const
 void
 simple_cbuf::pop()
 {
+	if(empty()){
+		return;
+	}
 	front++;
-	front %= length;
+	front %= buf_length;
 }
 
 int
@@ -41,5 +44,9 @@ void
 simple_cbuf::push(int new_value)
 {
 	data[back++] = new_value;
-	back %= length;
+	back %= buf_length;
+	if(back == front){
+		front++;
+		front %= buf_length;
+	}
 }
