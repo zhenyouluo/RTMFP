@@ -81,7 +81,7 @@ simple_cbuf::operator=(const simple_cbuf &cbuf)
 int&
 simple_cbuf::operator[](size_t index)
 {
-	if(index >= size)
+	if(index >= size())
 		return data[back];
 	if(index >= buf_length - front)
 		return data[index - (buf_length - front)];
