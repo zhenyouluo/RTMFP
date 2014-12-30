@@ -14,6 +14,8 @@ public:
 
 	explicit simple_cbuf(size_t size = default_size);
 
+	simple_cbuf(const simple_cbuf &cbuf);
+
 	~simple_cbuf();
 
 	size_t size() const;
@@ -25,6 +27,10 @@ public:
 	void   pop();
 
 	void   push(int new_value);
+
+	simple_cbuf& operator = (const simple_cbuf &cbuf);
+
+	int& operator[](size_t index);
 
 private:
 	/* whatever you want */
