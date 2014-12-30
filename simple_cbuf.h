@@ -4,23 +4,34 @@
 #include <cstdint>
 #include <cstddef>
 
-class simple_cbuf {
-	public:
-		enum { default_size = 100 };
-		explicit simple_cbuf(size_t size =
-				default_size);
-		~simple_cbuf();
-		size_t size() const;
-		bool   empty() const;
-		int    top() const; /* see below */
-		void   pop();
-		void   push(int new_value);
-	private:
-		/* whatever you want */
-		int		*data;
-		size_t	buf_length;
-		uint32_t	front;
-		uint32_t	back;
+class simple_cbuf 
+{
+public:
+	enum {
+	   	default_size = 100,
+		max_size = 100000
+	};
+
+	explicit simple_cbuf(size_t size = default_size);
+
+	~simple_cbuf();
+
+	size_t size() const;
+
+	bool   empty() const;
+
+	int    top() const; /* see below */
+
+	void   pop();
+
+	void   push(int new_value);
+
+private:
+	/* whatever you want */
+	int		*data;
+	size_t	buf_length;
+	size_t	front;	//first data
+	size_t	back;	//next write position
 };
 
 #endif //_SIMPLE_CBUF_

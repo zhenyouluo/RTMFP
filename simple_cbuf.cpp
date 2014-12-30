@@ -1,8 +1,12 @@
 
 #include "simple_cbuf.h"
 
-simple_cbuf::simple_cbuf(size_t size) : buf_length(size + 1)
+simple_cbuf::simple_cbuf(size_t size)
 {
+	if(size > max_size){
+		size = default_size;
+	}
+	buf_length = size;
 	data = new int[buf_length];
 	front = back = 0;
 }
@@ -15,7 +19,11 @@ simple_cbuf::~simple_cbuf()
 size_t
 simple_cbuf::size() const
 {
-	return (back + buf_length - front) % buf_length;
+	if(back >= front){
+		return back - front;
+	}else{
+		return buf_length - front + back;
+	}
 }
 
 bool
