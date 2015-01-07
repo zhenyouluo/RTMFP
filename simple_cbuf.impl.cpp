@@ -1,31 +1,37 @@
 
+#include <algorithm>
 #include "simple_cbuf.h"
 
-simple_cbuf::simple_cbuf(size_t size)
+template <typename T>
+simple_cbuf<T>::simple_cbuf(size_t size)
 {
 	if(size > max_size){
 		size = default_size;
 	}
 	buf_length = size + 1;
-	data = new int[buf_length];
+	data = new T[buf_length];
 	front = back = 0;
 }
 
-simple_cbuf::simple_cbuf(const simple_cbuf &cbuf) : 
+template <typename T>
+simple_cbuf<T>::simple_cbuf(const simple_cbuf &cbuf) : 
 	buf_length(cbuf.buf_length),
 	front(cbuf.front),
 	back(cbuf.back)
 {
-	data = new int[buf_length];
+	data = new T[buf_length];
+	std::copy(cbuf.data, cbuf.data + cbuf.buf_length, data);
 }
 
-simple_cbuf::~simple_cbuf()
+template <typename T>
+simple_cbuf<T>::~simple_cbuf()
 {
 	delete data;
 }
 
+template <typename T>
 size_t
-simple_cbuf::size() const
+simple_cbuf<T>::size() const
 {
 	if(back >= front){
 		return back - front;
@@ -34,14 +40,16 @@ simple_cbuf::size() const
 	}
 }
 
+template <typename T>
 bool
-simple_cbuf::empty() const
+simple_cbuf<T>::empty() const
 {
 	return front == back;
 }
 
+template <typename T>
 void
-simple_cbuf::pop()
+simple_cbuf<T>::pop()
 {
 	if(empty()){
 		return;
@@ -50,14 +58,16 @@ simple_cbuf::pop()
 	front %= buf_length;
 }
 
-int
-simple_cbuf::top() const
+template <typename T>
+const T&
+simple_cbuf<T>::top() const
 {
 	return data[front];
 }
 
+template <typename T>
 void
-simple_cbuf::push(int new_value)
+simple_cbuf<T>::push(const T& new_value)
 {
 	data[back++] = new_value;
 	back %= buf_length;
@@ -68,18 +78,22 @@ simple_cbuf::push(int new_value)
 	}
 }
 
-simple_cbuf&
-simple_cbuf::operator=(const simple_cbuf &cbuf)
+template <typename T>
+simple_cbuf<T>&
+simple_cbuf<T>::operator=(const simple_cbuf<T> &cbuf)
 {
 	buf_length = cbuf.buf_length;
 	front = cbuf.front;
 	back = cbuf.back;
+	delete data;
 	data = new int[buf_length];
+	std::copy(cbuf.data, cbuf.data + cbuf.buf_length, data);
 	return *this;
 }
 
-int&
-simple_cbuf::operator[](size_t index)
+template <typename T>
+const T&
+simple_cbuf<T>::operator[](size_t index)
 {
 	if(index >= size())
 		return data[back];
