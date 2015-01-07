@@ -22,7 +22,7 @@ public:
 
 	bool   empty() const;
 
-	int    top() const; /* see below */
+	int    top() const; 
 
 	void   pop();
 
@@ -33,7 +33,6 @@ public:
 	int& operator[](size_t index);
 
 private:
-	/* whatever you want */
 	int		*data;
 	size_t	buf_length;
 	size_t	front;	//first data
