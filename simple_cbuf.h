@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <cstddef>
 #include <vector>
+std::vector<int>	tt;
 
 template <typename T>
 class simple_cbuf 
